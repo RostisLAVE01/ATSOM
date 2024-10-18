@@ -177,7 +177,6 @@ def Cam5():
         closing = cv2.morphologyEx(red, cv2.MORPH_CLOSE, kernel)
         cont = conters(closing)
 
-
         for con in cont:
 
             con_mas = np.array(con)
