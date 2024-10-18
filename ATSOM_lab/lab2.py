@@ -83,7 +83,7 @@ import numpy as np
 #
 # Cam3()
 
-#4 что такое изображение первого порядка !!!!
+#4
 
 # def Cam4():
 #     cap = cv2.VideoCapture(0)
@@ -107,6 +107,12 @@ import numpy as np
 #         moment = cv2.moments(red)
 #
 #         square = moment['m00'] # площадь
+#         centerX = int(moment['m10'] / square)
+#         centerY = int(moment['m01'] / square)
+#
+#         print(f"центр по х: {centerX}")
+#         print(f"центр по у: {centerY}")
+#
 #         print(f"Площадь объекта: {square}")
 #
 #
@@ -122,6 +128,31 @@ import numpy as np
 # Cam4()
 
 #5
+def conters(frame):
+    marked = np.zeros(frame.shape, dtype=bool)
+    cont = []
+
+    for x in range(frame.shape[0]):
+        for y in range(frame.shape[1]):
+            if frame[x, y] == 255 and not marked[x, y]:
+                start = [(x, y)] #начальное значение
+                comp = []
+
+                while start:
+                    current = start.pop()
+                    if not marked[current]:
+                        marked[current] = True
+                        comp.append(current)
+                        for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+                            nx, ny = current[0] + dx, current[1] + dy
+                            if (0 <= nx < frame.shape[0] and
+                                    0 <= ny < frame.shape[1] and
+                                    frame[nx, ny] == 255 and
+                                    not marked[nx, ny]):
+                                start.append((nx, ny))
+                cont.append(comp)
+
+    return cont
 
 def Cam5():
     cap = cv2.VideoCapture(0)
@@ -142,27 +173,17 @@ def Cam5():
 
         ret, red = cv2.threshold(mask1, 128, 255, cv2.THRESH_BINARY)
 
-        cont, _ = cv2.findContours(red, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        kernel = np.ones((7, 7), np.uint8)
+        closing = cv2.morphologyEx(red, cv2.MORPH_CLOSE, kernel)
+        cont = conters(closing)
+
 
         for con in cont:
 
-            moment = cv2.moments(con)
-            square = moment['m00']  # площадь
+            con_mas = np.array(con)
+            x, y, w, h = cv2.boundingRect(con_mas.reshape(-1, 1, 2))
 
-            if square != 0:
-                centerX = int(moment['m10'] / square)
-                centerY = int(moment['m01'] / square)
-            else:
-                centerX, centerY = 0, 0
-
-            print(f"центр по х: {centerX}")
-            print(f"центр по у: {centerY}")
-
-
-
-            x, y, w, h = cv2.boundingRect(con)
-
-            cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 0), 2)
+            cv2.rectangle(frame, (y, x), (y + w, x + h), (255, 0, 0), 2)
 
 
         cv2.imshow('Camera', frame)
@@ -175,5 +196,4 @@ def Cam5():
     cv2.destroyAllWindows()
 
 
-Cam5()
 
