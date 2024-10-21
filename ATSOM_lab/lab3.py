@@ -58,7 +58,7 @@ import numpy as np
 
 # def Cam():
 #
-#     size = 7
+#     size = 5
 #     sigma = 1.0  # отклонение
 #     center = size // 2
 #     kernel = np.zeros((size, size))
@@ -81,7 +81,7 @@ import numpy as np
 #     print("Матрица свертки:")
 #     print(kernel)
 #
-#     image = cv2.imread('D:/draw/boom.png', cv2.IMREAD_GRAYSCALE)
+#     image = cv2.imread('D:/draw/boom.png', cv2.THRESH_BINARY)
 #     filtered_image = cv2.filter2D(image, -1, kernel)
 #
 #     cv2.namedWindow('Normal', cv2.WINDOW_KEEPRATIO)
@@ -120,7 +120,7 @@ import numpy as np
 #     sigma2 = 0.5
 #     sigma = 1.0  # отклонение
 #
-#     image = cv2.imread('D:/draw/boom.png', cv2.IMREAD_GRAYSCALE)
+#     image = cv2.imread('D:/draw/boom.png', cv2.THRESH_BINARY)
 #     kernel = GAIS(size,sigma)
 #     kernel2 = GAIS(size2, sigma2)
 #
@@ -140,20 +140,18 @@ import numpy as np
 
 #5
 
-# def Cam():
-#
-#     size = 7
-#     size2 = 3
-#     sigma2 = 0.5
-#     sigma = 1.0  # отклонение
-#
-#     image = cv2.imread('D:/draw/boom.png', cv2.IMREAD_GRAYSCALE)
-#
-#     filtered_image = cv2.GaussianBlur(image, (size, size), sigma)
-#     cv2.namedWindow('Display Windows 1', cv2.WINDOW_KEEPRATIO)
-#     cv2.imshow('Display Windows 1', filtered_image)
-#     cv2.waitKey(0)
-#     cv2.destroyAllWindows()
-#
-#
-# Cam()
+def Cam():
+
+    size = 7
+    sigma = 1.0  # отклонение
+
+    image = cv2.imread('D:/draw/boom.png', cv2.THRESH_BINARY)
+
+    filtered_image = cv2.GaussianBlur(image, (size, size), sigma)
+    cv2.namedWindow('Gausse', cv2.WINDOW_KEEPRATIO)
+    cv2.imshow('Gausse', filtered_image)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+
+Cam()
