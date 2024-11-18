@@ -42,7 +42,8 @@ def Cam():
 
     #матрица значений углов
 
-    corner = np.arctan2(sobY,sobX)
+    corner = np.atan(sobY, sobX)
+    # corner = np.arctan2(sobY,sobX)
 
 
     cv2.namedWindow('gradient', cv2.WINDOW_KEEPRATIO)
@@ -56,36 +57,54 @@ def Cam():
     corner2 = np.zeros((row,col))
     BW = np.zeros((row, col), dtype=np.uint8)
 
-    for i in range(1, row):
-        for j in range(1, col):
-            # Получаем угол градиента
-            corner2[i, j] = corner[i, j] * 180.0 / np.pi
-
-
-            # Направление градиента
-            if 0 <= corner2[i, j] < 22.5 or 157.5 <= corner2[i, j] < 202.5 or corner2[i, j] >= 337.5:
-                corner2[i, j] = 0
-            elif 22.5 <= corner2[i, j] < 67.5 or 202.5 <= corner2[i, j] < 247.5:
-                corner2[i, j] = 45
-            elif 67.5 <= corner2[i, j] < 112.5 or 247.5 <= corner2[i, j] < 292.5:
-                corner2[i, j] = 90
-            elif 112.5 <= corner2[i, j] < 157.5 or 292.5 <= corner2[i, j] < 337.5:
-                corner2[i, j] = 135
-
     for i in range(1, row - 1):
         for j in range(1, col - 1):
-            if corner2[i, j] == 0:
-                if G[i,j] >= G[i,j + 1] and G[i,j] >= G[i,j - 1]:
-                    BW[i, j] = G[i,j]
-            elif corner2[i, j] == 45:
-                if G[i,j] >= G[i + 1,j + 1] and G[i,j] >= G[i - 1,j - 1]:
+            if (sobX[i, j] < 0 and sobY[i, j] < 0 and np.tan(corner[i, j]) < -2.414) or (sobY[i, j] < 0 and sobX[i, j] < 0 and np.tan(corner[i, j]) > 2.414):
+                if (sobX[i, j] < 1 and sobY[i, j] < 0 and np.tan(corner[i, j]) < -0.414):
                     BW[i, j] = G[i, j]
-            elif corner2[i, j] == 90:
-                if G[i, j] >= G[i + 1, j] and G[i, j] >= G[i - 1, j]:
+
+            elif (2 - sobX[i, j] > 0 and sobY[i, j] < 0 and np.tan(corner[i, j]) < -0.414) or (sobY[i, j] > 0 and sobX[i, j] > 0 and np.tan(corner[i, j]) < 0.414):
+                if (3 - sobX[i, j] > 0 and sobY[i, j] > 0 and np.tan(corner[i, j]) < 2.414):
                     BW[i, j] = G[i, j]
-            elif corner2[i, j] == 135:
-                if G[i, j] >= G[i - 1, j + 1] and G[i, j] >= G[i + 1, j - 1]:
+
+            elif (4 - sobX[i, j] > 0 and sobY[i, j] < 0 and np.tan(corner[i, j]) > 2.414) or (sobY[i, j] > 0 and sobX[i, j] < 0 and np.tan(corner[i, j]) < -2.414):
+                if (sobY[i, j] > 0 and 5 - sobX[i, j] < 0 and np.tan(corner[i, j]) < -0.414):
                     BW[i, j] = G[i, j]
+
+            elif (sobY[i, j] > 0 and 6 - sobX[i, j] < 0 and np.tan(corner[i, j]) > -0.414) or (sobY[i, j] < 0 and sobX[i, j] < 0 and np.tan(corner[i, j]) < 0.414):
+                if (sobY[i, j] < 0 and 7 - sobX[i, j] < 0 and np.tan(corner[i, j]) < 2.414):
+                    BW[i, j] = G[i, j]
+
+    # for i in range(1, row):
+    #     for j in range(1, col):
+    #         # Получаем угол градиента
+    #         corner2[i, j] = corner[i, j] * 180.0 / np.pi
+    #
+    #
+    #         # Направление градиента
+    #         if 0 <= corner2[i, j] < 22.5 or 157.5 <= corner2[i, j] < 202.5 or corner2[i, j] >= 337.5:
+    #             corner2[i, j] = 0
+    #         elif 22.5 <= corner2[i, j] < 67.5 or 202.5 <= corner2[i, j] < 247.5:
+    #             corner2[i, j] = 45
+    #         elif 67.5 <= corner2[i, j] < 112.5 or 247.5 <= corner2[i, j] < 292.5:
+    #             corner2[i, j] = 90
+    #         elif 112.5 <= corner2[i, j] < 157.5 or 292.5 <= corner2[i, j] < 337.5:
+    #             corner2[i, j] = 135
+    #
+    # for i in range(1, row - 1):
+    #     for j in range(1, col - 1):
+    #         if corner2[i, j] == 0:
+    #             if G[i,j] >= G[i,j + 1] and G[i,j] >= G[i,j - 1]:
+    #                 BW[i, j] = G[i,j]
+    #         elif corner2[i, j] == 45:
+    #             if G[i,j] >= G[i + 1,j + 1] and G[i,j] >= G[i - 1,j - 1]:
+    #                 BW[i, j] = G[i, j]
+    #         elif corner2[i, j] == 90:
+    #             if G[i, j] >= G[i + 1, j] and G[i, j] >= G[i - 1, j]:
+    #                 BW[i, j] = G[i, j]
+    #         elif corner2[i, j] == 135:
+    #             if G[i, j] >= G[i - 1, j + 1] and G[i, j] >= G[i + 1, j - 1]:
+    #                 BW[i, j] = G[i, j]
 
     # for i in range(1, row-1):
     #     for j in range(1, col-1):
@@ -110,9 +129,9 @@ def Cam():
     cv2.namedWindow('No-max', cv2.WINDOW_KEEPRATIO)
     cv2.imshow('No-max', BW)
 
-    rows, cols = G.shape
-
-    image = np.zeros((rows, cols), dtype=np.uint8)
+    # rows, cols = G.shape
+    #
+    # image = np.zeros((rows, cols), dtype=np.uint8)
 
     # for i in range(1, rows - 1):
     #     for j in range(1, cols - 1):
