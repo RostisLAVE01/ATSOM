@@ -5,7 +5,7 @@ import numpy as np
 
 # def Cam():
 #
-#     image = cv2.imread('D:\draw\photo_chekin.jpeg',cv2.THRESH_BINARY)
+#     image = cv2.imread('D:\draw\photo_chekin.jpeg',cv2.IMREAD_GRAYSCALE)
 #
 #     kernl = (5,5)
 #     sigma = 1;
@@ -23,7 +23,7 @@ import numpy as np
 
 def Cam():
 
-    image = cv2.imread('D:\draw\photo_chekin.jpeg',cv2.THRESH_BINARY)
+    image = cv2.imread('D:\draw\photo_chekin.jpeg',cv2.IMREAD_GRAYSCALE)
 
     kernl = (5,5)
     sigma = 1
@@ -43,7 +43,7 @@ def Cam():
     #матрица значений углов
 
     corner = np.atan(sobY, sobX)
-    # corner = np.arctan2(sobY,sobX)
+    corner_2 = np.arctan2(sobY,sobX)
 
 
     cv2.namedWindow('gradient', cv2.WINDOW_KEEPRATIO)
@@ -56,6 +56,7 @@ def Cam():
     row,col = G.shape
     corner2 = np.zeros((row,col))
     BW = np.zeros((row, col), dtype=np.uint8)
+    BW2 = np.zeros((row, col), dtype=np.uint8)
 
     for i in range(1, row - 1):
         for j in range(1, col - 1):
@@ -75,41 +76,44 @@ def Cam():
                 if (sobY[i, j] < 0 and 7 - sobX[i, j] < 0 and np.tan(corner[i, j]) < 2.414):
                     BW[i, j] = G[i, j]
 
-    # for i in range(1, row):
-    #     for j in range(1, col):
-    #         # Получаем угол градиента
-    #         corner2[i, j] = corner[i, j] * 180.0 / np.pi
-    #
-    #
-    #         # Направление градиента
-    #         if 0 <= corner2[i, j] < 22.5 or 157.5 <= corner2[i, j] < 202.5 or corner2[i, j] >= 337.5:
-    #             corner2[i, j] = 0
-    #         elif 22.5 <= corner2[i, j] < 67.5 or 202.5 <= corner2[i, j] < 247.5:
-    #             corner2[i, j] = 45
-    #         elif 67.5 <= corner2[i, j] < 112.5 or 247.5 <= corner2[i, j] < 292.5:
-    #             corner2[i, j] = 90
-    #         elif 112.5 <= corner2[i, j] < 157.5 or 292.5 <= corner2[i, j] < 337.5:
-    #             corner2[i, j] = 135
-    #
-    # for i in range(1, row - 1):
-    #     for j in range(1, col - 1):
-    #         if corner2[i, j] == 0:
-    #             if G[i,j] >= G[i,j + 1] and G[i,j] >= G[i,j - 1]:
-    #                 BW[i, j] = G[i,j]
-    #         elif corner2[i, j] == 45:
-    #             if G[i,j] >= G[i + 1,j + 1] and G[i,j] >= G[i - 1,j - 1]:
-    #                 BW[i, j] = G[i, j]
-    #         elif corner2[i, j] == 90:
-    #             if G[i, j] >= G[i + 1, j] and G[i, j] >= G[i - 1, j]:
-    #                 BW[i, j] = G[i, j]
-    #         elif corner2[i, j] == 135:
-    #             if G[i, j] >= G[i - 1, j + 1] and G[i, j] >= G[i + 1, j - 1]:
-    #                 BW[i, j] = G[i, j]
+    for i in range(1, row):
+        for j in range(1, col):
+            # Получаем угол градиента
+            corner2[i, j] = corner_2[i, j] * 180.0 / np.pi
+
+
+            # Направление градиента
+            if 0 <= corner2[i, j] < 22.5 or 157.5 <= corner2[i, j] < 202.5 or corner2[i, j] >= 337.5:
+                corner2[i, j] = 0
+            elif 22.5 <= corner2[i, j] < 67.5 or 202.5 <= corner2[i, j] < 247.5:
+                corner2[i, j] = 45
+            elif 67.5 <= corner2[i, j] < 112.5 or 247.5 <= corner2[i, j] < 292.5:
+                corner2[i, j] = 90
+            elif 112.5 <= corner2[i, j] < 157.5 or 292.5 <= corner2[i, j] < 337.5:
+                corner2[i, j] = 135
+
+    for i in range(1, row - 1):
+        for j in range(1, col - 1):
+            if corner2[i, j] == 0:
+                if G[i,j] >= G[i,j + 1] and G[i,j] >= G[i,j - 1]:
+                    BW2[i, j] = G[i,j]
+            elif corner2[i, j] == 45:
+                if G[i,j] >= G[i + 1,j + 1] and G[i,j] >= G[i - 1,j - 1]:
+                    BW2[i, j] = G[i, j]
+            elif corner2[i, j] == 90:
+                if G[i, j] >= G[i + 1, j] and G[i, j] >= G[i - 1, j]:
+                    BW2[i, j] = G[i, j]
+            elif corner2[i, j] == 135:
+                if G[i, j] >= G[i - 1, j + 1] and G[i, j] >= G[i + 1, j - 1]:
+                    BW2[i, j] = G[i, j]
+
+    cv2.namedWindow('No-max-LK', cv2.WINDOW_KEEPRATIO)
+    cv2.imshow('No-max-LK', BW)
 
     # for i in range(1, row-1):
     #     for j in range(1, col-1):
     #         # Получаем угол градиента
-    #         corn = corner[i, j] * 180.0 / np.pi
+    #         corn = corner_2[i, j] * 180.0 / np.pi
     #
     #
     #         # Направление градиента
@@ -129,35 +133,35 @@ def Cam():
     cv2.namedWindow('No-max', cv2.WINDOW_KEEPRATIO)
     cv2.imshow('No-max', BW)
 
-    # rows, cols = G.shape
-    #
-    # image = np.zeros((rows, cols), dtype=np.uint8)
+    rows, cols = G.shape
 
-    # for i in range(1, rows - 1):
-    #     for j in range(1, cols - 1):
-    #         angle = corner[i, j] * 180.0 / np.pi
-    #
-    #         right = 255.0
-    #         left = 255.0
-    #
-    #         if 0 <= angle < 22.5 or 157.5 <= angle < 202.5 or angle >= 337.5:
-    #             right = G[i, j + 1]
-    #             left = G[i, j - 1]
-    #         elif 22.5 <= angle < 67.5 or 202.5 <= angle < 247.5:
-    #             right = G[i + 1, j + 1]
-    #             left = G[i - 1, j - 1]
-    #         elif 67.5 <= angle < 112.5 or 247.5 <= angle < 292.5:
-    #             right = G[i + 1, j]
-    #             left = G[i - 1, j]
-    #         elif 112.5 <= angle < 157.5 or 292.5 <= angle < 337.5:
-    #             right = G[i - 1, j + 1]
-    #             left = G[i + 1, j - 1]
-    #
-    #         if G[i, j] >= right and G[i, j] >= left:
-    #             image[i, j] = G[i, j]
-    #
-    # cv2.namedWindow('No-max2', cv2.WINDOW_KEEPRATIO)
-    # cv2.imshow('No-max2', image)
+    image = np.zeros((rows, cols), dtype=np.uint8)
+
+    for i in range(1, rows - 1):
+        for j in range(1, cols - 1):
+            angle = corner_2[i, j] * 180.0 / np.pi
+
+            right = 255.0
+            left = 255.0
+
+            if 0 <= angle < 22.5 or 157.5 <= angle < 202.5 or angle >= 337.5:
+                right = G[i, j + 1]
+                left = G[i, j - 1]
+            elif 22.5 <= angle < 67.5 or 202.5 <= angle < 247.5:
+                right = G[i + 1, j + 1]
+                left = G[i - 1, j - 1]
+            elif 67.5 <= angle < 112.5 or 247.5 <= angle < 292.5:
+                right = G[i + 1, j]
+                left = G[i - 1, j]
+            elif 112.5 <= angle < 157.5 or 292.5 <= angle < 337.5:
+                right = G[i - 1, j + 1]
+                left = G[i + 1, j - 1]
+
+            if G[i, j] >= right and G[i, j] >= left:
+                image[i, j] = G[i, j]
+
+    cv2.namedWindow('No-max-mod', cv2.WINDOW_KEEPRATIO)
+    cv2.imshow('No-max-mod', image)
 
 
     # задание 4
