@@ -130,7 +130,6 @@ pytesseract.pytesseract.tesseract_cmd = (r"D:\draw\tesseract\tesseract.exe")
 
 # 3
 
-
 # def load_annotations(annotations_file):
 #     annotations = {}
 #     with open(annotations_file, 'r', encoding='utf-8') as f:
