@@ -64,12 +64,12 @@ pytesseract.pytesseract.tesseract_cmd = (r"D:\draw\tesseract\tesseract.exe")
 #     return augmentations
 #
 # def cleanup_text(text):
-#     """Очистка текста: удаление спецсимволов и приведение к одному регистру."""
+#     #Очистка текста: удаление спецсимволов и приведение к одному регистру.
 #     cleaned = ''.join(filter(str.isalnum, text)).lower()
 #     return cleaned
 #
 # def new_recognition_method(filename, true_text=None):
-#     """Новый метод распознавания с очисткой текста."""
+#     #Новый метод распознавания с очисткой текста.
 #     if true_text is None:
 #         true_text = original_annotations.get(filename)  # Получаем истинный текст если не предоставлен
 #     if true_text is None:
@@ -141,7 +141,7 @@ pytesseract.pytesseract.tesseract_cmd = (r"D:\draw\tesseract\tesseract.exe")
 #
 #
 # def augment_image(image):
-#     """Аугментация изображения: создание 41 повёрнутого изображения."""
+#     #Аугментация изображения: создание 41 повёрнутого изображения
 #     augmented_images = []
 #     for angle in range(-20, 21):  # от -20 до 20 включая
 #         rotated_image = image.rotate(angle)
@@ -150,7 +150,7 @@ pytesseract.pytesseract.tesseract_cmd = (r"D:\draw\tesseract\tesseract.exe")
 #
 #
 # def get_final_result(texts):
-#     """Формирование итогового результата на основе 41 результата."""
+#     #Формирование итогового результата на основе 41 результата.
 #     #Counter для нахождения наиболее частого текста
 #     counts = Counter(texts)
 #     most_common_text, _ = counts.most_common(1)[0]
@@ -230,7 +230,7 @@ pytesseract.pytesseract.tesseract_cmd = (r"D:\draw\tesseract\tesseract.exe")
 #
 #
 # def cleanup_text(text):
-#     """Очистка текста: удаление спецсимволов и приведение к одному регистру."""
+
 #     cleaned = re.sub(r'[^а-яА-ЯёЁa-zA-Z0-9\s]', '', text)  # Удаляем все, кроме букв и цифр
 #     return cleaned.lower()  # Приводим к нижнему регистру
 #
@@ -265,13 +265,13 @@ pytesseract.pytesseract.tesseract_cmd = (r"D:\draw\tesseract\tesseract.exe")
 # original_annotations = load_annotations(annotations_file)
 #
 # # Тестируем новый метод на втором датасете
-# annotations_file2 = 'D:\\draw\\annotations2.txt'  # Укажите путь к вашему второму датасету
+# annotations_file2 = 'D:\\draw\\annotations2.txt'
 # dataset2_annotations = load_annotations(annotations_file2)
 #
 # # Тестируем на первом датасете
 # results_df_original = test_recognition_with_cleanup(original_annotations)
 #
-# # Тестируем на втором датасете (даже после обучения)
+# # Тестируем на втором датасете
 # results_df_dataset2 = test_recognition_with_cleanup(dataset2_annotations)
 #
 # # Сохранение результатов
