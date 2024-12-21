@@ -280,30 +280,21 @@ pytesseract.pytesseract.tesseract_cmd = (r"D:\draw\tesseract\tesseract.exe")
 
 # 6
 
-# Создаем экземпляр Reader для русского языка
-reader = easyocr.Reader(['ru'])  # Вы можете добавить другие языки, если это необходимо
+reader = easyocr.Reader(['ru'])
 
 
 def test_easyocr(dataset_path):
     results = []
 
-    # Перебираем все изображения в указанной директории
     for filename in os.listdir(dataset_path):
         if filename.endswith('.jpg') or filename.endswith('.png'):
             image_path = os.path.join(dataset_path, filename)
 
-            # Распознаем текст на изображении
             result = reader.readtext(image_path)
 
             # Извлекаем текста и конвертируем его в строку
             recognized_text = ' '.join([item[1] for item in result])
             print(f'Recognized text for {filename}: {recognized_text}')
-
-            # Добавьте свою логику для оценки качества распознавания,
-            # например, сравняя с известными правильными значениями
-            # Здесь добавьте код для вычисления качества, например:
-            # accuracy = some_accuracy_function(ground_truth_text, recognized_text)
-            # results.append({'filename': filename, 'recognized_text': recognized_text, 'accuracy': accuracy})
 
             # Пример результата (временно, замените на свою логику оценки)
             results.append({'filename': filename, 'recognized_text': recognized_text,
